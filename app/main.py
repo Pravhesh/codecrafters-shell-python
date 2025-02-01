@@ -7,11 +7,11 @@ def main():
     sys.stdout.write("$ ")
 
     # Wait for user input
-    while(True):
-        command = input("$ ")
-        if(command=="exit 0"):
-            return 0
-        print(f"{command}: command not found")
+    
+    command = input("$ ")
+    if(command=="exit 0"):
+            sys.exit()    
+    print(f"{command}: command not found")
     
 
 if __name__ == "__main__":
