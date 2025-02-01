@@ -10,7 +10,7 @@ def main():
     
     command = input()
     print(f"{command}: command not found")
-    main()
+    exit (0)
 
 if __name__ == "__main__":
     main()
