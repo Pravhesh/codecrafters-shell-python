@@ -12,6 +12,7 @@ def main():
     if(command=="exit 0"):
             sys.exit()    
     print(f"{command}: command not found")
+    main()
     
 
 if __name__ == "__main__":
