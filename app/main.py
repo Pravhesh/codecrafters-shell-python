@@ -8,6 +8,7 @@ def main():
 
     # Wait for user input
     PATH=os.getenv("PATH").split(":")
+    builtin_cmd=["echo","exit","type"]
     command = input()
     if command.startswith("echo"):
         print(command[5:])
@@ -15,11 +16,12 @@ def main():
             sys.exit()    
     elif command.startswith("type"):
         for path in PATH :
-            print(f"{command[5:]} is {path}/{command[5:]} ")
+            if os.path.isfile(f"{path}/{command[5:]}"):
+                    print(f"{command[5:]} is {path}/{command[5:]}")
+        if command[5:] in builtin_cmd:
+            print(f"{command[5:]} is a shell builtin")
     elif(command.startswith("type invalid")):
         print(f"{command[5:]}: not found")
-    # elif command.startswith("type"):
-    #     print(f"{command[5:]} is a shell builtin")
     else :       
         print(f"{command}: command not found")
     main()
