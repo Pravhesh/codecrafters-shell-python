@@ -17,9 +17,11 @@ def main():
     elif command.startswith("type"):
         for path in PATH :
             if os.path.isfile(f"{path}/{command[5:]}"):
-                    print(f"{command[5:]} is {path}/{command[5:]}")
+                    cmd_path=f"{command[5:]} is {path}/{command[5:]}"
         if command[5:] in builtin_cmd:
             print(f"{command[5:]} is a shell builtin")
+        elif cmd_path:
+            print(cmd_path)
         elif(command.startswith("type invalid")):
             print(f"{command[5:]}: not found")
     else :       
