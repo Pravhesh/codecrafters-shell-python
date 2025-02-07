@@ -20,8 +20,8 @@ def main():
                     print(f"{command[5:]} is {path}/{command[5:]}")
         if command[5:] in builtin_cmd:
             print(f"{command[5:]} is a shell builtin")
-    elif(command.startswith("type invalid")):
-        print(f"{command[5:]}: not found")
+        elif(command.startswith("type invalid")):
+            print(f"{command[5:]}: not found")
     else :       
         print(f"{command}: command not found")
     main()
