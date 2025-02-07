@@ -20,6 +20,8 @@ def main():
             print("exit is a shell builtin")
         elif command[5:]=="echo":
             print("echo is a shell builtin")
+        elif command[5:]=="invalid_command":
+            print("invalid_command: not found")
     else :       
         print(f"{command}: command not found")
     main()
