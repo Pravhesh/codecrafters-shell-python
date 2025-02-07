@@ -13,14 +13,14 @@ def main():
         print(command[5:])
     elif(command=="exit 0"):
             sys.exit()    
-    elif command.startswith("type ls"):
-        print(f"{command[5:]} is {PATH}/ls")
+    elif command.startswith("type"):
+        print(f"{command[5:]} is {PATH}/{command[5:]}")
     elif(command.startswith("type valid")):
         print(f"{command[5:]}: is {PATH}/valid_command")
     elif(command.startswith("type invalid")):
         print(f"{command[5:]}: not found")
-    elif command.startswith("type"):
-        print(f"{command[5:]} is a shell builtin")
+    # elif command.startswith("type"):
+    #     print(f"{command[5:]} is a shell builtin")
     else :       
         print(f"{command}: command not found")
     main()
