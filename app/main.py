@@ -14,9 +14,8 @@ def main():
     elif(command=="exit 0"):
             sys.exit()    
     elif command.startswith("type"):
-        print(f"{command[5:]} is {PATH}/{command[5:]}")
-    elif(command.startswith("type valid")):
-        print(f"{command[5:]}: is {PATH}/valid_command")
+        for path in PATH :
+            print(f"{command[5:]} is {path}/{command[5:]} ")
     elif(command.startswith("type invalid")):
         print(f"{command[5:]}: not found")
     # elif command.startswith("type"):
