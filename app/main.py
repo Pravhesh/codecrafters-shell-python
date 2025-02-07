@@ -11,9 +11,10 @@ def main():
     command = input()
     if command.startswith("echo"):
         print(command[5:])
-    if(command=="exit 0"):
+    elif(command=="exit 0"):
             sys.exit()    
-    print(f"{command}: command not found")
+    else :       
+        print(f"{command}: command not found")
     main()
     
 
