@@ -13,6 +13,10 @@ def main():
         print(command[5:])
     elif(command=="exit 0"):
             sys.exit()    
+    elif command.startswith("type ls"):
+        print(f"{command[5:]} is {PATH}/ls")
+    elif(command.startswith("type valid")):
+        print(f"{command[5:]}: is {PATH}/valid_command")
     elif(command.startswith("type invalid")):
         print(f"{command[5:]}: not found")
     elif command.startswith("type"):
