@@ -15,6 +15,7 @@ def main():
     elif(command=="exit 0"):
             sys.exit()    
     elif command.startswith("type"):
+        cmd_path=None
         for path in PATH :
             if os.path.isfile(f"{path}/{command[5:]}"):
                     cmd_path=f"{command[5:]} is {path}/{command[5:]}"
