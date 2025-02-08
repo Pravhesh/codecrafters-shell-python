@@ -13,11 +13,11 @@ def main():
     # Wait for user input
     PATH=os.getenv("PATH").split(":")
     builtin_cmd=["echo","exit","type"]
-    command= input()
+    command= input().split(" ")
     
     if command.startswith("echo"):
         print(command[5:])
-    if os.path.isfile(command.startswith("custom")):
+    if os.path.isfile(command[0]):
                     os.system(command)
     elif(command=="exit 0"):
             sys.exit()    
