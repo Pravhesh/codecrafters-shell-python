@@ -3,7 +3,7 @@ import os
 import subprocess
 from typing import Optional
 
-]
+
 
 def main():
     # Uncomment this block to pass the first stage
