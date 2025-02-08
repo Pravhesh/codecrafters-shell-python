@@ -37,7 +37,7 @@ def main():
         print(os.getcwd())
     elif(command.startswith("cd")):
         try:
-            os.chdir(" ".join(command[2:]))
+            os.chdir(" ".join(command[3:]))
         except FileNotFoundError:
             print(" ".join(command) + ": No such file or directory")
     else:
