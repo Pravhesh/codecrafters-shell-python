@@ -1,5 +1,14 @@
 import sys
 import os
+import subprocess
+from typing import Optional
+
+def locate_executable(command) -> Optional[str]:
+    path = os.environ.get("PATH", "")
+    for directory in path.split(":"):
+        file_path = os.path.join(directory, command)
+        if os.path.isfile(file_path) and os.access(file_path, os.X_OK):
+            return file_path
 
 def main():
     # Uncomment this block to pass the first stage
@@ -9,7 +18,9 @@ def main():
     # Wait for user input
     PATH=os.getenv("PATH").split(":")
     builtin_cmd=["echo","exit","type"]
-    command = input()
+    command,*args = input()
+    executable = locate_executable(command)
+    subprocess.run([executable, *args]) if executable else sys.exit(f"Error: Command '{command}' not found in PATH.")
     if command.startswith("echo"):
         print(command[5:])
     elif(command=="exit 0"):
