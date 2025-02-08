@@ -14,7 +14,7 @@ def main():
 
     # Wait for user input
     PATH=os.getenv("PATH").split(":")
-    builtin_cmd=["echo","exit","type"]
+    builtin_cmd=["echo","exit","type","pwd"]
     command= input().strip()
     
     if command.startswith("echo"):
