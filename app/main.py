@@ -39,7 +39,11 @@ def main():
         try:
         
             target_dir = command.split(maxsplit=1)[1]
-            os.chdir(target_dir)
+            home = os.path.expanduser("~")
+            if target_dir=="~":
+                os.chdir(home)
+            else:
+                os.chdir(target_dir)
         except IndexError:
             print("cd: missing operand")
         except FileNotFoundError:
