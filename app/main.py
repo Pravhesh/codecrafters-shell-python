@@ -33,6 +33,8 @@ def main():
             print(cmd_path)
         elif(command.startswith("type invalid")):
             print(f"{command[5:]}: not found")
+        elif(command.startswith("pwd")):
+            print(PATH)
     else:
         args = command.split()
         executable = args[0]
