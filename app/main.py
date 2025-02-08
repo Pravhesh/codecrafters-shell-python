@@ -17,7 +17,7 @@ def main():
     
     if command.startswith("echo"):
         print(command[5:])
-    if os.path.isfile(command.split(" ")[0]):
+    if os.path.isfile(command.startswith("custom")):
                     os.system(command)
     elif(command=="exit 0"):
             sys.exit()    
