@@ -16,8 +16,6 @@ def main():
     PATH=os.getenv("PATH").split(":")
     builtin_cmd=["echo","exit","type"]
     command= input().strip()
-    args= command.strip()
-    executable = args[0]
     
     if command.startswith("echo"):
         print(command[5:])
@@ -50,7 +48,7 @@ def main():
         if executable_path:
             try:
                 # Run the external command and pass arguments
-                subprocess.run([executable_path, *args[1:]])
+                subprocess.run(args,executable=executable)
             except Exception as e:
                 print(f"Error: {e}")
         else:
