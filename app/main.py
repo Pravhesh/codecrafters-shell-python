@@ -35,11 +35,15 @@ def main():
             print(f"{command[5:]}: not found")
     elif(command=="pwd"):
         print(os.getcwd())
-    elif(command.startswith("cd")):
+    elif command.startswith("cd"):
         try:
-            os.chdir(" ".join(command[3:]))
+        
+            target_dir = command.split(maxsplit=1)[1]
+            os.chdir(target_dir)
+        except IndexError:
+            print("cd: missing operand")
         except FileNotFoundError:
-            print(" ".join(command) + ": No such file or directory")
+            print(f"{command[3:]}: No such file or directory")
     else:
         args = command.split()
         executable = args[0]
