@@ -18,11 +18,12 @@ def main():
     # Wait for user input
     PATH=os.getenv("PATH").split(":")
     builtin_cmd=["echo","exit","type"]
-    command,*args = input()
-    executable = locate_executable(command)
-    subprocess.run([executable, *args]) if executable else sys.exit(f"Error: Command '{command}' not found in PATH.")
+    command,*args = input().split(" ")
+    
     if command.startswith("echo"):
         print(command[5:])
+    elif executable := locate_executable(command):
+            subprocess.run([executable, *args])
     elif(command=="exit 0"):
             sys.exit()    
     elif command.startswith("type"):
