@@ -35,23 +35,27 @@ def main():
             print(cmd_path)
         elif(command.startswith("type invalid")):
             print(f"{command[5:]}: not found")
-    elif executable.startswith("custom"):
-            executable_path = None
-            for path in PATH:
-                full_path = os.path.join(path, executable)
-                if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
-                    executable_path = full_path
-                    break
-            if executable_path:
-                try:
-                    # Run the external command and capture its output
-                    subprocess.run(args)
-                except Exception as e:
-                    print(f"Error: {e}")
-            else:
-                print(f"{executable}: command not found")
-    else :       
-        print(f"{command}: command not found")
+    else:
+        args = command.split()
+        executable = args[0]
+        executable_path = None
+
+        # Locate the executable in PATH
+        for path in PATH:
+            full_path = os.path.join(path, executable)
+            if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
+                executable_path = full_path
+                break
+
+        if executable_path:
+            try:
+                # Run the external command and pass arguments
+                subprocess.run([executable_path, *args[1:]])
+            except Exception as e:
+                print(f"Error: {e}")
+        else:
+            print(f"{executable}: command not found")
+
     main()
     
 
