@@ -16,7 +16,6 @@ def main():
         sys.stdout.flush()
 
         command = input().strip()
-
         if not command:
             continue
 
