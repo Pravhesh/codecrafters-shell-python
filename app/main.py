@@ -19,12 +19,11 @@ def main():
     command= input().strip()
     
     if command.startswith("echo"):
-        msg=command[5:]
-        if msg.startswith("'") and msg.endswith("'"):
-            msg=msg[1:-1]
-            print(msg)
+        if command.startswith("'") and command.endswith("'"):
+                message = command[6:-1]
+                print(message)
         else:
-            parts = shlex.split(msg)
+            parts = shlex.split(command[5:])
             print(" ".join(parts))
 
     elif(command=="exit 0"):
