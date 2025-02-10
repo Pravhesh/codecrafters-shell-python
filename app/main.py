@@ -22,7 +22,7 @@ def main():
             msg=command[6:-1]
             print(msg)
         else:
-            print(command[5:])
+            print(command[6:-1])
 
     elif(command=="exit 0"):
             sys.exit()    
