@@ -77,9 +77,10 @@ def main():
 
             if executable_path:
                 try:
+                    # Redirect output properly
                     with open(output_file, "w") if redirect else sys.stdout as f:
                         subprocess.run(parts, stdout=f, stderr=sys.stderr)
-                    continue  # No need to print output manually
+                    continue  # Skip printing output manually
                 except Exception as e:
                     output = f"Error: {e}"
             else:
@@ -93,6 +94,7 @@ def main():
 
             with open(output_file, "w") as f:
                 f.write(output + "\n")
+        
         else:
             print(output)
 
