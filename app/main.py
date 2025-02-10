@@ -55,7 +55,7 @@ def main():
         except FileNotFoundError:
             print(f"{command[3:]}: No such file or directory")
     else:
-        args = command.split()
+        args = shlex.split(command)
         executable = args[0]
         executable_path = None
 
