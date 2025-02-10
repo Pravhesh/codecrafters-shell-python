@@ -2,81 +2,99 @@ import sys
 import os
 import shlex
 import subprocess
-from typing import Optional
-
-
 
 def main():
-    # Uncomment this block to pass the first stage
-    
-    sys.stdout.write("$ ")
-    sys.stdout.flush()
+    PATH = os.getenv("PATH").split(":")
+    builtin_cmd = ["echo", "exit", "type", "pwd", "cd"]
 
+    while True:
+        sys.stdout.write("$ ")
+        sys.stdout.flush()
 
-    # Wait for user input
-    PATH=os.getenv("PATH").split(":")
-    builtin_cmd=["echo","exit","type","pwd"]
-    command= input().strip()
-    
-    if command.startswith("echo"):
-        if command.startswith("'") and command.endswith("'"):
-                message = command[6:-1]
-                print(message)
-        else:
-            parts = shlex.split(command[5:])
-            print(" ".join(parts))
+        command = input().strip()
 
-    elif(command=="exit 0"):
-            sys.exit()    
-    elif command.startswith("type"):
-        cmd_path=None
-        for path in PATH :
-            if os.path.isfile(f"{path}/{command[5:]}"):
-                    cmd_path=f"{command[5:]} is {path}/{command[5:]}"
-        if command[5:] in builtin_cmd:
-            print(f"{command[5:]} is a shell builtin")
-        elif cmd_path:
-            print(cmd_path)
-        elif(command.startswith("type invalid")):
-            print(f"{command[5:]}: not found")
-    elif(command=="pwd"):
-        print(os.getcwd())
-    elif command.startswith("cd"):
-        try:
-        
-            target_dir = command.split(maxsplit=1)[1]
-            home = os.path.expanduser("~")
-            if target_dir=="~":
-                os.chdir(home)
-            else:
-                os.chdir(target_dir)
-        except IndexError:
-            print("cd: missing operand")
-        except FileNotFoundError:
-            print(f"{command[3:]}: No such file or directory")
-    else:
-        args = shlex.split(command)
-        executable = args[0]
-        executable_path = None
+        if not command:
+            continue
 
-        # Locate the executable in PATH
-        for path in PATH:
-            full_path = os.path.join(path, executable)
-            if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
-                executable_path = full_path
-                break
+        parts = shlex.split(command)
 
-        if executable_path:
+        # Check for redirection
+        redirect = False
+        output_file = None
+        if '>' in parts or '1>' in parts:
             try:
-                # Run the external command and pass arguments
-                subprocess.run(args,executable=executable)
-            except Exception as e:
-                print(f"Error: {e}")
-        else:
-            print(f"{executable}: command not found")
+                redir_index = parts.index('>') if '>' in parts else parts.index('1>')
+                output_file = parts[redir_index + 1]
+                parts = parts[:redir_index]  # Remove redirection part
+                redirect = True
+            except IndexError:
+                print("Syntax error: No output file specified")
+                continue
 
-    main()
-    
+        command = parts[0]  # Extract the actual command
+
+        # Built-in commands
+        if command == "echo":
+            output = " ".join(parts[1:])
+        
+        elif command == "exit" and len(parts) == 2 and parts[1] == "0":
+            sys.exit()
+        
+        elif command == "type":
+            cmd_name = parts[1] if len(parts) > 1 else ""
+            if cmd_name in builtin_cmd:
+                output = f"{cmd_name} is a shell builtin"
+            else:
+                cmd_path = None
+                for path in PATH:
+                    full_path = os.path.join(path, cmd_name)
+                    if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
+                        cmd_path = full_path
+                        break
+                output = f"{cmd_name} is {cmd_path}" if cmd_path else f"{cmd_name}: not found"
+        
+        elif command == "pwd":
+            output = os.getcwd()
+        
+        elif command == "cd":
+            try:
+                target_dir = parts[1] if len(parts) > 1 else os.path.expanduser("~")
+                os.chdir(target_dir)
+                output = ""  # No output for successful `cd`
+            except FileNotFoundError:
+                output = f"{parts[1]}: No such file or directory"
+            except IndexError:
+                output = "cd: missing operand"
+        
+        else:
+            # Handle external commands correctly
+            executable_path = None
+            for path in PATH:
+                full_path = os.path.join(path, command)
+                if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
+                    executable_path = full_path
+                    break
+
+            if executable_path:
+                try:
+                    with open(output_file, "w") if redirect else sys.stdout as f:
+                        subprocess.run(parts, stdout=f, stderr=sys.stderr)
+                    continue  # No need to print output manually
+                except Exception as e:
+                    output = f"Error: {e}"
+            else:
+                output = f"{command}: command not found"
+
+        # Ensure the output file's directory exists before writing
+        if redirect and output_file:
+            output_dir = os.path.dirname(output_file)
+            if output_dir and not os.path.exists(output_dir):
+                os.makedirs(output_dir)  # Create directory if it doesn't exist
+
+            with open(output_file, "w") as f:
+                f.write(output + "\n")
+        else:
+            print(output)
 
 if __name__ == "__main__":
     main()
