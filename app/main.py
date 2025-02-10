@@ -1,5 +1,6 @@
 import sys
 import os
+import shlex
 import subprocess
 from typing import Optional
 
@@ -23,7 +24,8 @@ def main():
             msg=msg[1:-1]
             print(msg)
         else:
-            print(msg)
+            parts = shlex.split(msg)
+            print(" ".join(parts))
 
     elif(command=="exit 0"):
             sys.exit()    
