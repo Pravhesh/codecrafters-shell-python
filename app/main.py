@@ -18,11 +18,12 @@ def main():
     command= input().strip()
     
     if command.startswith("echo"):
-        if command.startswith("'") and command.endswith("'"):
-            msg=command[6:-1]
+        msg=command[5:]
+        if msg.startswith("'") and msg.endswith("'"):
+            msg=command[1:-1]
             print(msg)
         else:
-            print(command[6:-1])
+            print(msg)
 
     elif(command=="exit 0"):
             sys.exit()    
