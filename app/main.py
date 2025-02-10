@@ -19,7 +19,8 @@ def main():
     
     if command.startswith("echo"):
         if command.startswith("'") and command.endswith("'"):
-            print(command[6:-1])
+            msg=command[6:-1]
+            print(msg)
         else:
             print(command[5:])
 
