@@ -1,5 +1,6 @@
 import sys
 import os
+import shlex
 import subprocess
 from typing import Optional
 
@@ -18,7 +19,12 @@ def main():
     command= input().strip()
     
     if command.startswith("echo"):
-        print(command[5:])
+        if command.startswith("'") and command.endswith("'"):
+                message = command[6:-1]
+                print(message)
+        else:
+            parts = shlex.split(command[5:])
+            print(" ".join(parts))
 
     elif(command=="exit 0"):
             sys.exit()    
@@ -49,7 +55,7 @@ def main():
         except FileNotFoundError:
             print(f"{command[3:]}: No such file or directory")
     else:
-        args = command.split()
+        args = shlex.split(command)
         executable = args[0]
         executable_path = None
 
