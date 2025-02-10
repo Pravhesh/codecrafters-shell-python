@@ -5,9 +5,13 @@ import subprocess
 
 def main():
     PATH = os.getenv("PATH").split(":")
-    builtin_cmd = ["echo", "exit", "type", "pwd", "cd"]
+    builtin_cmds = ["echo", "exit", "type", "pwd", "cd"]
 
     while True:
+        # Restore stdout before printing the prompt
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
         sys.stdout.write("$ ")
         sys.stdout.flush()
 
@@ -18,14 +22,14 @@ def main():
 
         parts = shlex.split(command)
 
-        # Check for redirection
+        # Check for output redirection (>)
         redirect = False
         output_file = None
-        if '>' in parts or '1>' in parts:
+        if ">" in parts or "1>" in parts:
             try:
-                redir_index = parts.index('>') if '>' in parts else parts.index('1>')
+                redir_index = parts.index(">") if ">" in parts else parts.index("1>")
                 output_file = parts[redir_index + 1]
-                parts = parts[:redir_index]  # Remove redirection part
+                parts = parts[:redir_index]  # Remove redirection part from command
                 redirect = True
             except IndexError:
                 print("Syntax error: No output file specified")
@@ -33,7 +37,7 @@ def main():
 
         command = parts[0]  # Extract the actual command
 
-        # Built-in commands
+        # Handle built-in commands
         if command == "echo":
             output = " ".join(parts[1:])
         
@@ -42,7 +46,7 @@ def main():
         
         elif command == "type":
             cmd_name = parts[1] if len(parts) > 1 else ""
-            if cmd_name in builtin_cmd:
+            if cmd_name in builtin_cmds:
                 output = f"{cmd_name} is a shell builtin"
             else:
                 cmd_path = None
@@ -86,7 +90,7 @@ def main():
             else:
                 output = f"{command}: command not found"
 
-        # Ensure the output file's directory exists before writing
+        # Handle output redirection
         if redirect and output_file:
             output_dir = os.path.dirname(output_file)
             if output_dir and not os.path.exists(output_dir):
